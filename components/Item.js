@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlightBase } from 'react-native';
 
 export default class Item extends Component {
 
@@ -16,21 +16,43 @@ export default class Item extends Component {
   render() {
 
     const { question, index, correctAns, incorrAns, handleClick } = this.props
-
     const answers = [correctAns, ...incorrAns]
-
-    if (this.state.answered === false) {
+    // console.log("question", question)
+    // const string = 'Research &amp; Analysis'
+    // const msg2 = parseFromString(msg, 'text/html')
+    // console.log(msg2)
+    // console.log(decodeURIComponent(decodeURIComponent(question)))
+    // let domparser = new DOMParser();
+    // let doc = domparser.parseFromString(string, 'text/html')
+    // console.log(doc)
 
       return (
         <View style={styles.item}>
           <Text style={styles.question}>
-            Question #{index}: {question}{'\n'}
+            Question #{index}: {question.replace(/&quot;/g, '"')}{'\n'}
             </Text>
           <Text style={styles.answer}>
 
-            {answers.map( (answer,index) =>
+            {answers.map( (answer,index) => {
+
+              let highlight;
+              if (this.state.selected[index]) {
+                if (answer === correctAns) {
+                  highlight = styles.correct
+                } else if (answer !== correctAns) {
+                  highlight = styles.incorrect
+                }
+              }
+
+              if (this.state.answered && answer===correctAns) {
+                highlight=styles.correct;
+              }
+
+              return (
               <Text key={answer}
-                onPress={ () => {
+                onPress={ this.state.answered
+                  ? undefined
+                  : (() => {
                     handleClick(answer, correctAns);
                     let newSelected = this.state.selected;
                     newSelected[index] = 1;
@@ -38,47 +60,19 @@ export default class Item extends Component {
                       answered: true,
                       selected: [...newSelected]
                     })
-
-                  }
-                }>
+                  })}
+                style={highlight}
+                  >
                 {answer} {'\n'}
               </Text>
+
+              )
+              }
             )}
 
           </Text>
         </View>
       );
-    } else {
-
-      return (
-        <View style={styles.item}>
-          <Text style={styles.question}>
-            Question #{index}: {question}{'\n'}
-            </Text>
-          <Text style={styles.answer}>
-
-            {answers.map( (answer, index) =>
-               this.state.selected[index]
-               ?
-                <Text key={answer} style={styles.selected}>
-                  {answer} {'\n'}
-                </Text>
-                :
-                  <Text key={answer} >
-                  {answer} {'\n'}
-                </Text>
-
-
-
-
-            )}
-
-          </Text>
-        </View>
-      );
-
-    }
-
 
   }
 }
@@ -112,7 +106,10 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  selected: {
+  correct: {
     backgroundColor: '#B6F9C9',
+  },
+  incorrect: {
+    backgroundColor: '#E57E75',
   },
 });

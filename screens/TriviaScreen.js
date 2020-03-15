@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import {Header} from 'react-native-elements';
 
 import Item from '../components/Item'
 
@@ -48,6 +49,7 @@ export default class HelloWorldApp extends Component {
 
   render() {
 
+
     if(this.state.isLoading){
       return(
         <View style={{flex: 1, padding: 20}}>
@@ -58,6 +60,16 @@ export default class HelloWorldApp extends Component {
 
     return(
       <View style={{flex: 1, paddingTop:20}}>
+        <Header
+          containerStyle={styles.header}
+          centerComponent={{
+            text: `SCORE: ${this.state.numCorrect}/10`,
+            style: { color: '#fff' },
+          }}
+
+          // statusBarProps={{ barStyle: 'light-content' }}
+          // barStyle="light-content" // or directly
+        />
         <FlatList
           data={this.state.dataSource}
           renderItem={
@@ -70,7 +82,7 @@ export default class HelloWorldApp extends Component {
               handleClick={this.handleQuestionAnswer}
               />
           }
-          keyExtractor={({id}, index) => id}
+          keyExtractor={({id}, index) => "" + index}
         />
       </View>
     );
@@ -84,6 +96,11 @@ const styles = StyleSheet.create({
   baseText: {
     fontFamily: 'Cochin',
     marginVertical: 20,
+  },
+  header: {
+    backgroundColor: '#000',
+    justifyContent: 'space-around',
+    marginTop: -36
   },
   titleText: {
     fontSize: 20,

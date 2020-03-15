@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import Constants from 'expo-constants';
 
+import {Header} from 'react-native-elements'
+
 const DATA = [
   {
     title: 'Main dishes',
@@ -37,7 +39,14 @@ function Item({ title }) {
 
 export default function App() {
   return (
+
+
     <SafeAreaView style={styles.container}>
+      <Header
+          leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
+          rightComponent={{ icon: 'home', color: '#fff' }}
+      />
       <SectionList
         sections={DATA}
         keyExtractor={(item, index) => item + index}
