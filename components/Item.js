@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableHighlightBase } from 'react-native';
-
+import { Text, View, StyleSheet } from 'react-native';
 
 
 export default class Item extends Component {
@@ -11,7 +10,6 @@ export default class Item extends Component {
       answered: false,
       selected: [0, 0, 0, 0]
     }
-
   }
 
 
@@ -27,10 +25,12 @@ export default class Item extends Component {
 
       return (
         <View style={styles.item}>
+
           <Text style={styles.question}>
             Question #{index}: {entities2.decode(entities.decode(question))}{'\n'}
             </Text>
-          <Text style={styles.answer}>
+
+          <Text style={styles.answers}>
 
             {answers.map( (answer,index) => {
 
@@ -66,10 +66,11 @@ export default class Item extends Component {
               </Text>
 
               )
-              }
-            )}
+            })}
 
           </Text>
+
+
         </View>
       );
 
@@ -79,31 +80,24 @@ export default class Item extends Component {
 
 
 const styles = StyleSheet.create({
-  baseText: {
-    fontFamily: 'Cochin',
-    marginVertical: 20,
-  },
-  titleText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  question: {
-    fontSize: 24,
-  },
-  answer: {
-    fontSize: 18,
-  },
+
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    // flexDirection: 'column',
+    // flexWrap: 'wrap',
+  },
+  question: {
+    fontSize: 20,
+  },
+  answers: {
+    fontSize: 16,
+    // flex: 2,
+    flexWrap: 'wrap',
+    // flexDirection: 'column',
+    justifyContent: "space-around"
   },
   correct: {
     backgroundColor: '#B6F9C9',

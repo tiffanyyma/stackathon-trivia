@@ -41,13 +41,9 @@ export default class HelloWorldApp extends Component {
 
   handleQuestionAnswer(answer, correctAns) {
     if (answer === correctAns) {
-      console.log("correct answer")
       this.setState({
         numCorrect: ++this.state.numCorrect
       })
-      console.log("num correct", this.state.numCorrect)
-    } else {
-      console.log("wrong answer")
     }
 
     this.setState({
@@ -96,8 +92,6 @@ export default class HelloWorldApp extends Component {
             style: { color: '#fff' },
           }}
 
-          // statusBarProps={{ barStyle: 'light-content' }}
-          // barStyle="light-content" // or directly
         />
         <FlatList
           data={this.state.dataSource}
@@ -122,30 +116,11 @@ export default class HelloWorldApp extends Component {
 
 
 const styles = StyleSheet.create({
-  baseText: {
-    fontFamily: 'Cochin',
-    marginVertical: 20,
-  },
+
   header: {
     backgroundColor: '#000',
     justifyContent: 'space-around',
     marginTop: -36
-  },
-  titleText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  question: {
-    fontSize: 24,
-  },
-  answer: {
-    fontSize: 18,
   },
   item: {
     backgroundColor: '#f9c2ff',

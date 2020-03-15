@@ -45,14 +45,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
         }}
       /> */}
-      {/* <BottomTab.Screen
+      <BottomTab.Screen
         name="Test"
         component={TestScreen}
         options={{
           title: 'Testing Screen',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
-      /> */}
+      />
       <BottomTab.Screen
         name="Settings"
         component={Settings}
