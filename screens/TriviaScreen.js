@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, ActivityIndicator, FlatList } from 'react-nativ
 import {Header} from 'react-native-elements';
 
 import Item from '../components/Item'
+import ScorePage from '../components/ScorePage'
 
 export default class HelloWorldApp extends Component {
 
@@ -11,26 +12,31 @@ export default class HelloWorldApp extends Component {
     this.state ={
       isLoading: true,
       numCorrect: 0,
-
+      numAnswered: 0
     }
     this.handleQuestionAnswer = this.handleQuestionAnswer.bind(this)
+    this.playAgain = this.playAgain.bind(this)
+  }
+
+  loadData() {
+    return fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=medium&type=multiple')
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+      this.setState({
+        isLoading: false,
+        dataSource: responseJson.results,
+
+      });
+
+    })
+    .catch((error) =>{
+      console.error(error);
+    });
   }
 
   componentDidMount(){
-    return fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=medium&type=multiple')
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.results,
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+    this.loadData()
   }
 
   handleQuestionAnswer(answer, correctAns) {
@@ -44,16 +50,39 @@ export default class HelloWorldApp extends Component {
       console.log("wrong answer")
     }
 
+    this.setState({
+      numAnswered: ++this.state.numAnswered
+    })
+
+  }
+
+  playAgain() {
+    this.setState({
+      isLoading: true,
+      numCorrect: 0,
+      numAnswered: 0
+    })
+    this.loadData();
   }
 
 
   render() {
 
-
     if(this.state.isLoading){
       return(
         <View style={{flex: 1, padding: 20}}>
           <ActivityIndicator/>
+        </View>
+      )
+    }
+
+    if(this.state.numAnswered === 5){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          <ScorePage
+            correct={this.state.numCorrect}
+            playAgain={this.playAgain}
+          />
         </View>
       )
     }

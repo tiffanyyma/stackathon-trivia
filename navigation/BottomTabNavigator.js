@@ -6,6 +6,7 @@ import LinksScreen from '../screens/LinksScreen';
 
 import TestScreen from '../screens/testScreen';
 import TriviaScreen from '../screens/TriviaScreen';
+import Settings from '../screens/Settings'
 
 
 const BottomTab = createBottomTabNavigator();
@@ -24,7 +25,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Trivia"
         component={TriviaScreen}
         options={{
-          title: 'Trivia',
+          title: 'Questions',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
@@ -44,11 +45,19 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
         }}
       /> */}
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Test"
         component={TestScreen}
         options={{
-          title: 'TestScreen',
+          title: 'Testing Screen',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      /> */}
+      <BottomTab.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          title: 'Settings',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />

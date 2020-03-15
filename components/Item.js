@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableHighlightBase } from 'react-native';
 
+
+
 export default class Item extends Component {
 
   constructor(props){
@@ -17,19 +19,16 @@ export default class Item extends Component {
 
     const { question, index, correctAns, incorrAns, handleClick } = this.props
     const answers = [correctAns, ...incorrAns]
-    // console.log("question", question)
-    // const string = 'Research &amp; Analysis'
-    // const msg2 = parseFromString(msg, 'text/html')
-    // console.log(msg2)
-    // console.log(decodeURIComponent(decodeURIComponent(question)))
-    // let domparser = new DOMParser();
-    // let doc = domparser.parseFromString(string, 'text/html')
-    // console.log(doc)
+
+    const Entities = require('html-entities').AllHtmlEntities;
+    const Entities2 = require('html-entities').XmlEntities;
+    const entities = new Entities();
+    const entities2 = new Entities2();
 
       return (
         <View style={styles.item}>
           <Text style={styles.question}>
-            Question #{index}: {question.replace(/&quot;/g, '"')}{'\n'}
+            Question #{index}: {entities2.decode(entities.decode(question))}{'\n'}
             </Text>
           <Text style={styles.answer}>
 

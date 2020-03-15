@@ -1,60 +1,71 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
+  Button,
   View,
   SafeAreaView,
-  SectionList,
+  Text,
+  Alert,
 } from 'react-native';
 import Constants from 'expo-constants';
 
-import {Header} from 'react-native-elements'
-
-const DATA = [
-  {
-    title: 'Main dishes',
-    data: ['Pizza', 'Burger', 'Risotto'],
-  },
-  {
-    title: 'Sides',
-    data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
-  },
-  {
-    title: 'Drinks',
-    data: ['Water', 'Coke', 'Beer'],
-  },
-  {
-    title: 'Desserts',
-    data: ['Cheese Cake', 'Ice Cream'],
-  },
-];
-
-function Item({ title }) {
-  return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
+function Separator() {
+  return <View style={styles.separator} />;
 }
 
 export default function App() {
   return (
-
-
     <SafeAreaView style={styles.container}>
-      <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
-      />
-      <SectionList
-        sections={DATA}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => <Item title={item} />}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
-        )}
-      />
+      <View>
+        <Text style={styles.title}>
+          The title and onPress handler are required. It is recommended to set
+          accessibilityLabel to help make your app usable by everyone.
+        </Text>
+        <Button
+          title="Press me"
+          onPress={() => Alert.alert('Simple Button pressed')}
+        />
+      </View>
+      <Separator />
+      <View>
+        <Text style={styles.title}>
+          Adjust the color in a way that looks standard on each platform. On
+          iOS, the color prop controls the color of the text. On Android, the
+          color adjusts the backgroud color of the button.
+        </Text>
+        <Button
+          title="Press me"
+          color="#f194ff"
+          onPress={() => Alert.alert('Button with adjusted color pressed')}
+        />
+      </View>
+      <Separator />
+      <View>
+        <Text style={styles.title}>
+          All interaction for the component are disabled.
+        </Text>
+        <Button
+          title="Press me"
+          disabled
+          onPress={() => Alert.alert('Cannot press this one')}
+        />
+      </View>
+      <Separator />
+      <View>
+        <Text style={styles.title}>
+          This layout strategy lets the title define the width of the button.
+        </Text>
+        <View style={styles.fixToText}>
+          <Button
+            title="Left button"
+            onPress={() => Alert.alert('Left button pressed')}
+          />
+          <Button
+            title="Right button"
+            onPress={() => Alert.alert('Right button pressed')}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -65,15 +76,17 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
     marginHorizontal: 16,
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
+  title: {
+    textAlign: 'center',
     marginVertical: 8,
   },
-  header: {
-    fontSize: 32,
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  title: {
-    fontSize: 24,
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
 });
