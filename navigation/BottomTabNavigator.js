@@ -4,8 +4,12 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 
+import TestScreen from '../screens/testScreen';
+import TriviaScreen from '../screens/TriviaScreen';
+
+
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+const INITIAL_ROUTE_NAME = 'Trivia';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -14,7 +18,16 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
+
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+      <BottomTab.Screen
+        name="Trivia"
+        component={TriviaScreen}
+        options={{
+          title: 'Trivia',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
@@ -23,15 +36,24 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Links"
         component={LinksScreen}
         options={{
           title: 'Resources',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
         }}
+      /> */}
+      <BottomTab.Screen
+        name="Test"
+        component={TestScreen}
+        options={{
+          title: 'TestScreen',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
       />
     </BottomTab.Navigator>
+
   );
 }
 
