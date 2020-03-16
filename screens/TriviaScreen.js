@@ -2,69 +2,16 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import {Header} from 'react-native-elements';
 
+//import components here
 import Item from '../components/Item'
 import ScorePage from '../components/ScorePage'
 
-export default class HelloWorldApp extends Component {
-
-  constructor(props){
-    super(props);
-    this.state ={
-      isLoading: true,
-      numCorrect: 0,
-      numAnswered: 0
-    }
-    this.handleQuestionAnswer = this.handleQuestionAnswer.bind(this)
-    this.playAgain = this.playAgain.bind(this)
-  }
-
-  loadData() {
-    return fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=medium&type=multiple')
-    .then((response) => response.json())
-    .then((responseJson) => {
-
-      this.setState({
-        isLoading: false,
-        dataSource: responseJson.results,
-
-      });
-
-    })
-    .catch((error) =>{
-      console.error(error);
-    });
-  }
-
-  componentDidMount(){
-    this.loadData()
-  }
-
-  handleQuestionAnswer(answer, correctAns) {
-    if (answer === correctAns) {
-      this.setState({
-        numCorrect: ++this.state.numCorrect
-      })
-    }
-
-    this.setState({
-      numAnswered: ++this.state.numAnswered
-    })
-
-  }
-
-  playAgain() {
-    this.setState({
-      isLoading: true,
-      numCorrect: 0,
-      numAnswered: 0
-    })
-    this.loadData();
-  }
-
+export default class Trivia extends Component {
 
   render() {
 
-    if(this.state.isLoading){
+    //loading image
+    if(this.props.isLoading){
       return(
         <View style={{flex: 1, padding: 20}}>
           <ActivityIndicator/>
@@ -72,45 +19,49 @@ export default class HelloWorldApp extends Component {
       )
     }
 
-    if(this.state.numAnswered === 5){
+    //if all questions are answered, it'll show the score page
+    if(this.props.numAnswered === 10){
       return(
         <View style={{flex: 1, padding: 20}}>
           <ScorePage
-            correct={this.state.numCorrect}
-            playAgain={this.playAgain}
+            correct={this.props.numCorrect}
+            playAgain={this.props.playAgain}
           />
         </View>
       )
     }
 
+    //else if no questions are answered yet, list of questions show up
     return(
       <View style={{flex: 1, paddingTop:20}}>
         <Header
           containerStyle={styles.header}
-          centerComponent={{
-            text: `SCORE: ${this.state.numCorrect}/10`,
-            style: { color: '#fff' },
+          leftComponent={{
+            text: `GAME ID: ${this.props.gameId}`,
+            style: { color: '#fff', width: 90 },
+          }}
+          rightComponent={{
+            text: `SCORE: ${this.props.numCorrect}/10`,
+            style: { color: '#fff', width: 90 },
           }}
 
         />
         <FlatList
-          data={this.state.dataSource}
+          data={this.props.dataSource}
           renderItem={
             ({item, index}) =>
-            <Item key={item}
+            <Item key={item.question}
               index={index}
               question={item.question}
               correctAns={item.correct_answer}
               incorrAns={item.incorrect_answers}
-              handleClick={this.handleQuestionAnswer}
+              handleClick={this.props.handleQuestionAnswer}
               />
           }
           keyExtractor={({id}, index) => "" + index}
         />
       </View>
     );
-
-
   }
 }
 

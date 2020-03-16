@@ -1,125 +1,217 @@
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, Alert, Image } from 'react-native';
+import { Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-import * as WebBrowser from 'expo-web-browser';
 
-import { MonoText } from '../components/StyledText';
+// import stateless components here
+import Trivia from './TriviaScreen';
 
-export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
+
+export default class HomeScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state ={
+      isLoading: true,
+      numCorrect: 0,
+      numAnswered: 0
+    }
+    this.handleQuestionAnswer = this.handleQuestionAnswer.bind(this);
+    this.playAgain = this.playAgain.bind(this);
+  }
+
+  //if we decide to start a new game, createNewGame runs and loads a new game
+   createNewGame() {
+    fetch('http://192.168.1.234:3000/api/', {
+      method: 'POST',
+      cache: 'no-cache',
+      body: '',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(async (res) => {
+      const data = await res.json();
+      if (res.status === 200) {
+        Alert.alert(
+          'New Trivia Game',
+          'Play against friends by having them enter the Game ID ' + data.gameId,
+          [
+            {
+              text: 'Play Now', onPress: () => {
+                this.loadData(data.gameId);
+              }
             }
-            style={styles.welcomeImage}
+          ]
+        )
+      } else {
+        throw new Error('Error from server creating game')
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    });
+  }
+
+  //if we want to join a game, joinGame will get the gameId and pass it to loadData so it gets the correct game questions
+  joinGame() {
+    Alert.prompt(
+      'Join Trivia Game',
+      'Please enter an existing Game Id',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: (gameId) => this.loadData(gameId)
+        }
+      ],
+      'plain-text');
+  }
+  loadData(gameId) {
+    fetch(`http://192.168.1.234:3000/api/${gameId}`)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        isLoading: false,
+        questions: responseJson,
+        gameId: gameId,
+      });
+
+    })
+    .catch((error) =>{
+      console.error(error);
+    });
+  }
+
+  //handleQuestionAnswer keeps track of how many questions were answered
+  handleQuestionAnswer(answer, correctAns) {
+    if (answer === correctAns) {
+      this.setState({
+        numCorrect: ++this.state.numCorrect
+      })
+    }
+
+    this.setState({
+      numAnswered: ++this.state.numAnswered
+    })
+  }
+
+  // resets state at the end if you want to play again
+  playAgain() {
+    this.setState({
+      questions: null,
+      numCorrect: 0,
+      numAnswered: 0,
+      isLoading: true
+    })
+  }
+
+
+  render() {
+
+    //if no game has been started, there are no questions on the state
+    //it will render these two buttons for user to decide action
+    if (!this.state.questions) {
+      return (
+        <View style={styles.container}>
+          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+
+
+
+            <View style={styles.title}>
+              <Text style={styles.titleText}>Let's Play!</Text>
+            </View>
+
+            <Image
+              style={styles.welcomeImage}
+              source={{uri: 'https://www.bluefootsd.com/wp-content/uploads/2018/05/trivia-night.png'}}
+            />
+
+            <View style={styles.buttonContainer}>
+              <Button
+                title={'New Game'}
+                type={'outline'}
+                onPress={() => this.createNewGame(this.props.navigation)}
+              />
+              <Button
+                title={'Join Game'}
+                type={'outline'}
+                onPress={() => this.joinGame(this.props.navigation)}
+              />
+            </View>
+
+
+          </ScrollView>
+        </View>
+
+      );
+      }
+      else {
+
+        //once questions are fetched by loaddata, trivia component will render
+        return (
+          <Trivia
+            loading={this.state.loading}
+            dataSource={this.state.questions}
+            numCorrect={this.state.numCorrect}
+            numAnswered={this.state.numAnswered}
+            handleQuestionAnswer={this.handleQuestionAnswer}
+            playAgain={this.playAgain}
+            gameId={this.state.gameId}
           />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-HomeScreen.navigationOptions = {
-  header: null,
-};
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
+        )
+      }
   }
 }
 
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}
 
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
   contentContainer: {
-    paddingTop: 30,
+    justifyContent: 'center',
+    alignContent: 'center',
+    // paddingTop: 30,
+    padding: 30,
   },
-  welcomeContainer: {
+  title: {
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 20,
+    textShadowOffset: {width: 2, height: 2},
+    textShadowColor: '#B6F9C9',
+    textShadowRadius: 4,
+    fontFamily: 'Courier'
   },
   welcomeImage: {
-    width: 100,
-    height: 80,
+    justifyContent: 'center',
+    // flex: 1,
+    width: 300,
+    height: 300,
     resizeMode: 'contain',
     marginTop: 3,
     marginLeft: -10,
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+  titleText: {
+    fontSize: 32,
+    fontWeight: '900'
   },
+  buttonContainer: {
+    alignItems: 'center',
+    paddingTop: 10,
+    marginHorizontal: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+    // flexWrap: 'wrap'
+  },
+
+
   homeScreenFilename: {
     marginVertical: 7,
   },

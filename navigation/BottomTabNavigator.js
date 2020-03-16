@@ -10,7 +10,7 @@ import Settings from '../screens/Settings'
 
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Trivia';
+const INITIAL_ROUTE_NAME = 'Home';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -22,21 +22,22 @@ export default function BottomTabNavigator({ navigation, route }) {
 
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+      {/* <BottomTab.Screen
         name="Trivia"
         component={TriviaScreen}
         options={{
           title: 'Questions',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
-      />
-      {/* <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
-        }}
       /> */}
+
       {/* <BottomTab.Screen
         name="Links"
         component={LinksScreen}
@@ -45,14 +46,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
         }}
       /> */}
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Test"
         component={TestScreen}
         options={{
           title: 'Testing Screen',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
-      />
+      /> */}
       <BottomTab.Screen
         name="Settings"
         component={Settings}
@@ -71,7 +72,7 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Home':
-      return 'How to get started';
+      return "Tiffany's Trivia Game";
     case 'Links':
       return 'Links to learn more';
   }

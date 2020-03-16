@@ -1,7 +1,11 @@
-In an ideal world, my app would have the following features:
+In an ideal world, this trivia app would have the following features:
 
 Simple
 - [ ] HTML symbols formatted properly
+
+Formatting
+- [ ] New Game / Load Game are pretty
+- [ ] Answers better formatted
 
 
 Ambitious

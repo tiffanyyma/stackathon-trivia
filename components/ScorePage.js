@@ -5,64 +5,48 @@ export default class Item extends Component {
 
   constructor(props){
     super(props);
-    this.state = {
-
-    }
-
+    this.state = {};
   }
-
 
   render() {
 
     const { correct, playAgain } = this.props
 
-      return (
-        <View style={styles.item}>
-          <Text style={styles.titleText}>Congrats!</Text>
+    return (
+      <View style={styles.item}>
+        <Text style={styles.titleText}>Congrats!</Text>
 
-          <Text style={styles.paragraph}>
-            You got {correct} out of 10 questions correct!
-          </Text>
+        <Text style={styles.paragraph}>
+          You got {correct} out of 10 questions correct!
+        </Text>
 
-          {/* <Text style={styles.paragraph}>
-            Play again?
-          </Text> */}
-          <Button
-          title="Play Again?"
-          onPress={ () => {
-            playAgain()
-          }}
+        <Button title="Play Again?"
+          onPress={ () => playAgain() }
         />
 
-        </View>
-      );
-
+      </View>
+    );
   }
 }
 
 
 
 const styles = StyleSheet.create({
-  baseText: {
-    fontFamily: 'Cochin',
-    marginVertical: 20,
-  },
+
   titleText: {
-    fontSize: 20,
+    paddingTop: 50,
+    fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   paragraph: {
+    // fontFamily: 'Cochin',
     margin: 24,
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-  },
-  question: {
-    fontSize: 24,
-  },
-  answer: {
-    fontSize: 18,
+    padding: 10,
+    // marginVertical: 20,
   },
   item: {
     // backgroundColor: '#f9c2ff',
@@ -70,10 +54,5 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  correct: {
-    backgroundColor: '#B6F9C9',
-  },
-  incorrect: {
-    backgroundColor: '#E57E75',
-  },
+
 });

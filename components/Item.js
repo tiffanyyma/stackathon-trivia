@@ -6,18 +6,46 @@ export default class Item extends Component {
 
   constructor(props){
     super(props);
+
+    const { correctAns, incorrAns } = this.props
+
+    //creates an array of answer
+    const answers = [correctAns, ...incorrAns]
+
+    //copied from stackoverflow https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    function shuffle(array) {
+      var currentIndex = array.length, temporaryValue, randomIndex;
+
+      while (0 !== currentIndex) { // While there remain elements to shuffle...
+
+        randomIndex = Math.floor(Math.random() * currentIndex); // Pick a remaining element...
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    }
+
+    shuffle(answers);
+
     this.state = {
       answered: false,
-      selected: [0, 0, 0, 0]
+      selected: [0, 0, 0, 0],
+      answers: answers
     }
+
   }
 
 
   render() {
 
-    const { question, index, correctAns, incorrAns, handleClick } = this.props
-    const answers = [correctAns, ...incorrAns]
+    const { question, index, correctAns, handleClick } = this.props
 
+    //attempt to decode HTML entities
     const Entities = require('html-entities').AllHtmlEntities;
     const Entities2 = require('html-entities').XmlEntities;
     const entities = new Entities();
@@ -28,12 +56,13 @@ export default class Item extends Component {
 
           <Text style={styles.question}>
             Question #{index}: {entities2.decode(entities.decode(question))}{'\n'}
-            </Text>
+          </Text>
 
           <Text style={styles.answers}>
 
-            {answers.map( (answer,index) => {
+            {this.state.answers.map( (answer,index) => {
 
+              //highlights correct and incorrect answers
               let highlight;
               if (this.state.selected[index]) {
                 if (answer === correctAns) {

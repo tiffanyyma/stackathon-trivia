@@ -6,7 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
+// disabled bottom navigation for now
+// import BottomTabNavigator from './navigation/BottomTabNavigator';
+
+import HomeScreen from './screens/HomeScreen'
 import useLinking from './navigation/useLinking';
 
 const Stack = createStackNavigator();
@@ -51,7 +54,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
+            <Stack.Screen name="Tiffany's Trivia Disaster" component={HomeScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
