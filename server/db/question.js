@@ -15,7 +15,7 @@ const Question = db.define('question', {
     type: Sequelize.ARRAY(Sequelize.TEXT)
   },
   gameId: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
   },
 },
   {

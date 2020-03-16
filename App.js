@@ -54,7 +54,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Tiffany's Trivia Disaster" component={HomeScreen} />
+            <Stack.Screen name="Tiffany's Trivia" component={HomeScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
