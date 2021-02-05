@@ -12,8 +12,8 @@ Necessary software:
 
 How to Run: 
 1. Clone this repo
-2. Install all dependencies (‘npm install’)
-3. Run it with the script ‘npm start’
+2. Install all dependencies (`npm install`)
+3. Run it with the script `npm start`
 
 Open up the localhost address to view the expo devtools on your computer browser. You can then run the iOS simulator.
 To view the app on your phone, first install the Expo IO app on your iOs mobile device and then scan the QR code provided in your terminal or on the browser. 
